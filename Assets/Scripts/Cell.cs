@@ -2,40 +2,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 public class Cell : MonoBehaviour
 {
 
     public Grid Grid;
-    public bool State;
-    private bool NextState;
-    private Vector3 pos;
+
+    public Util.CellStateEnum State;
+    private Util.CellStateEnum NextState;
+    
     private Func<Vector3, List<Cell>> GetSurrounding;
-    private int nextUpdate = 1;
+    private Vector3 position;
 
+    private const EVRButtonId Trigger = EVRButtonId.k_EButton_SteamVR_Trigger;
 
-	// Use this for initialization
-	void Start () {
+    // Initialize with arguments
+    public void Initialize(Vector3 pos, Func<Vector3, List<Cell>> getSurrounding)
+    {
+        position = pos;
+        GetSurrounding = getSurrounding;
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	    if (Time.time >= nextUpdate)
-	    {
-	        nextUpdate = Mathf.FloorToInt(Time.time);
-	        Cycle();
-	    }
+	void Update ()
+	{
+	    State = NextState;
 	}
 
     void Cycle()
     {
-        var neighbors = GetSurrounding(pos);
+        var neighbors = GetSurrounding(position);
     }
 
-    void Initialize(Vector3 pos, Func<Vector3, List<Cell>> GetSurrounding)
+    private void OnCollisionStay(Collision collision)
     {
-        this.pos = pos;
-        this.GetSurrounding = GetSurrounding;
+        // this is where i'd add an effect to the gameobject to show it's selected
+
+
+        var controller = collision.collider.GetComponent<SteamController>().Controller;
+        if (controller.GetPress(Trigger))
+            NextState = State == Util.CellStateEnum.Alive ? Util.CellStateEnum.Dead : Util.CellStateEnum.Alive;
+        
     }
+
+
 }
