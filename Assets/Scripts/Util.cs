@@ -44,4 +44,9 @@ public class Util : MonoBehaviour {
                select new List<Vector3> { new Vector3(x, y, start.z), new Vector3(x, y, end.z) };
     }
 
+    public static int Interval(float start, float end, float step)
+    {
+        return Mathf.FloorToInt(Mathf.Abs(start - end) / step);
+    }
+
 }

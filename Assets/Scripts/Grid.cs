@@ -7,39 +7,21 @@ using UnityEngine.UI;
 
 public class Grid : MonoBehaviour
 {
+    public GameObject config;
     public GameObject LinePrefab;
-    private float CycleTime;
     private Vector3 GridStart;
     private Vector3 GridStop;
     private float CellWidth;
-
-    public GameObject config;
-    
-
-
 
     // Use this for initialization
     private void Start()
     {
         var configObj = config.GetComponent<LifeConfig>();
-        CycleTime = configObj.CycleTime;
         GridStart = configObj.GridStart;
         GridStop = configObj.GridStop;
         CellWidth = configObj.CellWidth;
 
-
         MakeGrid(GridStart, GridStop, CellWidth);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
-    }
-
-    private void Cycle()
-    {
-        
     }
 
     private void MakeGrid(Vector3 gridStart, Vector3 gridStop, float cellWidth)

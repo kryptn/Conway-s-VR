@@ -6,28 +6,21 @@ using Valve.VR;
 
 public class Cell : MonoBehaviour
 {
-
-    public Grid Grid;
-
+    
     public Util.CellStateEnum State;
     private Util.CellStateEnum NextState;
     
-    private Func<Vector3, List<Cell>> GetSurrounding;
+    private Func<Vector3, List<GameObject>> GetSurrounding;
     private Vector3 position;
 
     private const EVRButtonId Trigger = EVRButtonId.k_EButton_SteamVR_Trigger;
 
     // Initialize with arguments
-    public void Initialize(Vector3 pos, Func<Vector3, List<Cell>> getSurrounding)
+    public void Initialize(Vector3 pos, Func<Vector3, List<GameObject>> getSurrounding)
     {
         position = pos;
         GetSurrounding = getSurrounding;
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update ()
