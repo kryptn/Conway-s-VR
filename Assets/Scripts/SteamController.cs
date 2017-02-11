@@ -11,15 +11,32 @@ public class SteamController : MonoBehaviour
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
     private SteamVR_TrackedObject trackedObj;
+    private const EVRButtonId Trigger = EVRButtonId.k_EButton_SteamVR_Trigger;
 
-    // Update is called once per frame
-    void Update()
+    private GameObject cell;
+
+    private void Start()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
     }
 
-    void OnCollisionStay(Collision collision)
+    // Update is called once per frame
+    void Update()
     {
+        if (Controller == null)
+            return;
 
+        if (cell != null && Controller.GetPressDown(Trigger))
+            cell.SendMessage("Toggle");
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        cell = other.gameObject;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        cell = null;
     }
 }

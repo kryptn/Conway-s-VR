@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Cells : MonoBehaviour {
@@ -11,7 +12,7 @@ public class Cells : MonoBehaviour {
 
     private float CycleTime;
     private float CellWidth;
-    private Vector3 scale {get { return new Vector3(CellWidth * .75f, CellWidth * .75f, CellWidth * .75f); } }
+    private Vector3 scale {get { return new Vector3(CellWidth * .5f, CellWidth * .5f, CellWidth * .5f); } }
     private Vector3 origin;
     private Vector3 dimensions;
 
@@ -25,7 +26,7 @@ public class Cells : MonoBehaviour {
         dimensions = new Vector3(Util.Interval(configObj.GridStart.x, configObj.GridStop.x, CellWidth),
             Util.Interval(configObj.GridStart.y, configObj.GridStop.y, CellWidth),
             Util.Interval(configObj.GridStart.z, configObj.GridStop.z, CellWidth));
-
+        grid = new Dictionary<Vector3, GameObject>();
         MakeGrid();
     }
 
@@ -43,9 +44,9 @@ public class Cells : MonoBehaviour {
                     go.transform.localScale = scale;
                     go.transform.parent = transform;
                     go.GetComponent<BoxCollider>().size = scale;
-                    go.GetComponent<Cell>().Initialize(pos, Surrounding);
+                    go.GetComponent<Cell>().Initialize(new Vector3(x, y, z), Surrounding);
 
-                    //grid[pos] = go;
+                    grid[pos] = go;
                 }
             }
         }
@@ -62,24 +63,8 @@ public class Cells : MonoBehaviour {
         }*/
     }
 
-    private List<GameObject> Surrounding(Vector3 pos)
+    private IEnumerable<GameObject> Surrounding(Vector3 pos)
     {
-        var result = new List<GameObject>();
-        for (var x = -1; x <= 1; x++)
-        {
-            for (var y = -1; y <= 1; y++)
-            {
-                for (var z = -1; z <= 1; z++)
-                {
-                    var goout = new GameObject();
-                    var offset = pos + new Vector3(x, y, z);
-                    grid.TryGetValue(offset, out goout);
-                    if (goout != null)
-                        result.Add(goout);
-                }
-            }
-        }
-        return result;
+        return from c in Util.Surrounding(pos) where c != pos && grid.ContainsKey(c) select grid[c];
     }
-
 }

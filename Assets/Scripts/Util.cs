@@ -17,7 +17,7 @@ public class Util : MonoBehaviour {
         for (var i = 0; i < int.MaxValue; i++)
         {
             var value = min + step * i;
-            if (value > max)
+            if (value >= max)
                 break;
             yield return value;
         }
@@ -47,6 +47,13 @@ public class Util : MonoBehaviour {
     public static int Interval(float start, float end, float step)
     {
         return Mathf.FloorToInt(Mathf.Abs(start - end) / step);
+    }
+
+    public static IEnumerable<Vector3> Surrounding(Vector3 pos)
+    {
+
+        var offset = new List<float> {-1, 0, 1};
+        return from x in offset from y in offset from z in offset select new Vector3(pos.x + x, pos.y + y, pos.z + z);
     }
 
 }
