@@ -23,6 +23,18 @@ public class Util : MonoBehaviour {
         }
     }
 
+    public static IEnumerable<Vector3> Range3D(Vector3 start, Vector3 end, float step)
+    {
+        var xdir = end.x > start.x ? 1 : -1;
+        var ydir = end.y > start.y ? 1 : -1;
+        var zdir = end.z > start.z ? 1 : -1;
+
+        return from x in Range(start.x, end.x, xdir)
+            from y in Range(start.y, end.y, ydir)
+            from z in Range(start.z, end.z, zdir)
+            select new Vector3(x, y, z);
+    }
+
     public static IEnumerable<List<Vector3>> SideX(Vector3 start, Vector3 end, float step)
     {
         return from y in Range(start.y, end.y, step)
@@ -53,7 +65,7 @@ public class Util : MonoBehaviour {
     {
 
         var offset = new List<float> {-1, 0, 1};
-        return from x in offset from y in offset from z in offset select new Vector3(pos.x + x, pos.y + y, pos.z + z);
+        return from x in offset from y in offset from z in offset select new Vector3(x, y, z) + pos;
     }
 
 }
