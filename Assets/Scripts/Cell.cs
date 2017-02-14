@@ -29,6 +29,11 @@ public class Cell : MonoBehaviour
     public void UpdateNeighbors(int alive)
     {
         neighbors = alive;
+
+        if (alive < 5 || alive >20)
+            NextState = Util.CellStateEnum.Dead;
+        else if (State == Util.CellStateEnum.Dead && new List<int>{8, 9, 10}.Contains(alive))
+            NextState = Util.CellStateEnum.Alive;
     }
     
     void Toggle()

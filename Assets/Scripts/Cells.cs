@@ -63,7 +63,7 @@ public class Cells : MonoBehaviour {
         }
     }
 
-    void Iterate()
+    public void Iterate()
     {
 
         foreach (var kvp in grid)
